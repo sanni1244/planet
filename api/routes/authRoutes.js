@@ -8,9 +8,7 @@ router.post(
   "/signup",
   [
     body("email").isEmail().withMessage("Invalid email format."),
-    body("username").isLength({ min: 4 }).withMessage("Username must be 4-12 characters long."),
-    body("username").isLength({ max: 12 }).withMessage("Username must be 4-12 characters long."),
-
+    body("username").isLength({ min: 4, max: 12 }).withMessage("Username must be 4-12 characters long."),
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long.")

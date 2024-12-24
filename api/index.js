@@ -1,14 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db"); 
+require('dotenv').config();
 const authRoutes = require("./routes/authRoutes");
 const qRoutes = require("./routes/questionRoutes");
 const gRoutes = require("./routes/gameRoutes");
 const dRoutes = require("./routes/dashboard");
 const pRoutes = require("./routes/profileRoutes");
-
-dotenv.config();
 connectDB();
 
 const app = express();

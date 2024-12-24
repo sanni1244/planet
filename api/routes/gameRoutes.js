@@ -12,57 +12,64 @@ router.get("/user", async (req, res) => {
 
     try {
         let user = await UserGame.findOne({ userId });
-
         if (!user) {
-            user = new UserGame({ userId, username: userId, highscore: 0 });
+            user = new UserGame({ userId, username: userId, highscore: 0, country: "Unknown" });
             await user.save();
         }
 
-        res.json(user);
+        res.status(200).json(user);
     } catch (error) {
-        console.error("Error fetching or creating user:", error);
+        console.error("Error fetching or creating user:", error.message);
         res.status(500).json({ message: "Server error" });
     }
 });
 
+
 // Update high score
-router.post("/user/highscore", async (req, res) => {
-    const { username, highscore } = req.body;
-
-    if (!username || highscore === undefined) {
-        return res.status(400).json({ message: "Missing username or highscore" });
+const validateFields = (fields) => (req, res, next) => {
+    const missingFields = fields.filter(field => req.body[field] === undefined);
+    if (missingFields.length) {
+        return res.status(400).json({ message: `Missing fields: ${missingFields.join(", ")}` });
     }
+    next();
+};
 
-    try {
-        const user = await User.findOneAndUpdate({ username }, { highscore }, { new: true });
+router.post(
+    "/user/highscore",
+    validateFields(["username", "highscore"]),
+    async (req, res) => {
+        const { username, highscore } = req.body;
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        try {
+            const user = await User.findOneAndUpdate({ username }, { highscore }, { new: true });
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error("Error updating high score:", error.message);
+            res.status(500).json({ message: "Error updating high score" });
         }
-
-        res.json(user);
-    } catch (error) {
-        console.error("Error updating high score:", error);
-        res.status(500).json({ message: "Error updating high score" });
     }
-});
+);
 
-router.post("/game-stats", async (req, res) => {
-    const { userId, score, timeUsed, correctAnswers } = req.body;
+router.post(
+    "/game-stats",
+    validateFields(["userId", "score", "timeUsed", "correctAnswers"]),
+    async (req, res) => {
+        const { userId, score, timeUsed, correctAnswers } = req.body;
 
-    if (!userId || score === undefined || timeUsed === undefined || correctAnswers === undefined) {
-        return res.status(400).json({ message: "Missing required fields" });
+        try {
+            const gameStat = new GameStats({ userId, score, timeUsed, correctAnswers });
+            await gameStat.save();
+            res.status(201).json(gameStat);
+        } catch (error) {
+            console.error("Error saving game stats:", error.message);
+            res.status(500).json({ message: "Error saving game stats" });
+        }
     }
+);
 
-    try {
-        const gameStat = new GameStats({ userId, score, timeUsed, correctAnswers });
-        await gameStat.save();
-        res.json(gameStat);
-    } catch (error) {
-        console.error("Error saving game stats:", error);
-        res.status(500).json({ message: "Error saving game stats" });
-    }
-});
 
 router.get("/leaderboard", async (req, res) => {
     const { userId, country } = req.query;

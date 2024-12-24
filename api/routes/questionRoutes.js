@@ -4,7 +4,21 @@ const Question = require("../models/question");
 
 const router = express.Router();
 
-router.get("/", getQuestions);
+router.get("/", async (req, res) => {
+  const { difficulty } = req.query;
+  try {
+    const query = difficulty ? { difficulty: difficulty.toLowerCase() } : {};
+    const questions = await Question.aggregate([
+      { $match: query },
+      { $sample: { size: 20 } } 
+    ]);
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error("Error fetching questions:", error.message);
+    res.status(500).json({ error: "Failed to fetch questions." });
+  }
+});
+
 
 // Create a question  
 router.post("/", async (req, res) => {

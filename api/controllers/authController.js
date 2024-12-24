@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { body, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 const User = require("../models/user");
 
 // Signup
@@ -25,8 +25,7 @@ const signup = async (req, res) => {
     }
 
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create new user
     const newUser = new User({
@@ -46,7 +45,6 @@ const signup = async (req, res) => {
 
 // Login
 const login = async (req, res) => {
-  // Validate request input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -55,21 +53,19 @@ const login = async (req, res) => {
   const { usernameOrEmail, password } = req.body;
 
   try {
-    // Find user by email or username
     const user = await User.findOne({
       $or: [{ email: usernameOrEmail }, { username: usernameOrEmail }],
     });
+
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
-    // Verify password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: user._id, username: user.username, email: user.email },
       process.env.JWT_SECRET,
@@ -79,14 +75,11 @@ const login = async (req, res) => {
     res.status(200).json({
       message: "Login successful!",
       token,
-      user: {
-        username: user.username,
-        email: user.email,
-      },
+      user: { username: user.username, email: user.email },
     });
   } catch (error) {
     console.error("Login error:", error.message);
-    res.status(500).json({ error: "Internal server error." , error: error.message});
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 

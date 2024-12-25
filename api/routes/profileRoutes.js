@@ -11,28 +11,28 @@ const sharp = require('sharp');
 // Set up multer for file uploading
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // destination directory for the uploaded files
+    cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
-    cb(null, `${req.params.username}.jpg`); // saving file with username as filename
+    cb(null, `${req.params.username}.jpg`); 
   },
 });
 
 // File filter function to check file type (JPEG or PNG)
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png']; // allowed mime types for images
+  const allowedTypes = ['image/jpeg', 'image/png']; 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true); // Allow file if the type is valid
   } else {
-    cb(new Error('Invalid file type. Only JPG and PNG are allowed.'), false); // Reject if the type is not allowed
+    cb(new Error('Invalid file type. Only JPG and PNG are allowed.'), false); 
   }
 };
 
 // Define file size limit (2MB)
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // File size limit (2MB)
-  fileFilter: fileFilter, // Apply the file type filter
+  storage: storage, 
+  limits: { fileSize: 2 * 1024 * 1024 }, 
+  fileFilter: fileFilter, 
 }).single('profilePicture');
 
 // Upload profile picture route
@@ -43,7 +43,7 @@ router.post('/upload-profile-picture/:username', (req, res) => {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.status(400).json({ message: 'File size exceeds the 2MB limit.' });
       }
-      return res.status(400).json({ message: err.message }); // For invalid file type or other errors
+      return res.status(400).json({ message: err.message }); 
     }
 
     try {
@@ -51,7 +51,6 @@ router.post('/upload-profile-picture/:username', (req, res) => {
 
       // Save the path to the profile picture in the database
       const profilePicturePath = `/uploads/${req.params.username}.jpg`;
-
       const updatedUser = await User.findOneAndUpdate(
         { username: req.params.username },
         { profilePicture: profilePicturePath },
@@ -232,7 +231,6 @@ router.delete('/delete/:username', async (req, res) => {
 });
 
 // Reset user score
-// Reset user score
 router.delete('/reset-score/:username', async (req, res) => {
     try {
       const deletedUsers = await GameStats.deleteMany({ userId: req.params.username });
@@ -241,7 +239,7 @@ router.delete('/reset-score/:username', async (req, res) => {
       }
       res.status(200).json({ message: 'Score reset successfully!' });
     } catch (err) {
-      res.status(500).json({ message: 'Error deleting users' });
+      res.status(500).json({ message: 'Error encountered' });
     }
   });
   

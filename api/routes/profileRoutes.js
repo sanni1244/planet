@@ -11,7 +11,7 @@ const sharp = require('sharp');
 // Set up multer for file uploading
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); 
+    cb(null, '../uploads/'); 
   },
   filename: (req, file, cb) => {
     cb(null, `${req.params.username}.jpg`); 
@@ -47,10 +47,10 @@ router.post('/upload-profile-picture/:username', (req, res) => {
     }
 
     try {
-      const finalFilePath = `uploads/${req.params.username}.jpg`; // Path for saved file
+      const finalFilePath = `../uploads/${req.params.username}.jpg`; // Path for saved file
 
       // Save the path to the profile picture in the database
-      const profilePicturePath = `/uploads/${req.params.username}.jpg`;
+      const profilePicturePath = `../uploads/${req.params.username}.jpg`;
       const updatedUser = await User.findOneAndUpdate(
         { username: req.params.username },
         { profilePicture: profilePicturePath },
@@ -220,7 +220,7 @@ router.delete('/delete/:username', async (req, res) => {
 
     // Delete the user's profile picture file from the file system
     if (deletedUser.profilePicture) {
-      const filePath = `uploads/${deletedUser.profilePicture.split('/')[2]}`;
+      const filePath = `../uploads/${deletedUser.profilePicture.split('/')[2]}`;
       fs.unlinkSync(filePath);
     }
 

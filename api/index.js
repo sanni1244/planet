@@ -18,7 +18,6 @@ app.use("/api/questions", qRoutes);
 app.use("/api/games", gRoutes); 
 app.use("/api/user", dRoutes); 
 app.use("/api/profile", pRoutes); 
-app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

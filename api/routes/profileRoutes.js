@@ -2,76 +2,91 @@ const express = require('express');
 const router = express.Router();
 const User = require("../models/user");
 const { UserGame, GameStats } = require("../models/game");
-const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require("bcryptjs");
 const { validationResult } = require('express-validator');
+const multer = require('multer');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Ensure the uploads directory exists
-const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set in your .env file
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-// Set up multer for file uploading
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${req.params.username}.jpg`);
+// Configure multer to use Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+      const username = req.params.username; // Access username from the route parameter
+      return {
+          folder: 'profile_pictures', // Cloudinary folder name
+          format: 'jpg', // Force the file format to JPG
+          public_id: username, // Rename the file to $username
+      };
   },
 });
 
-// File filter function to check file type (JPEG or PNG)
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png'];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type. Only JPG and PNG are allowed.'), false);
-  }
-};
+const upload = multer({ storage });
 
-// Define file size limit (2MB)
-const upload = multer({
-  storage,
-  limits: { fileSize: 6 * 1024 * 1024 },
-  fileFilter,
-}).single('profilePicture');
-
-// Upload profile picture route
-router.post('/upload-profile-picture/:username', (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({ message: 'File size exceeds the 2MB limit.' });
+// Upload route using Cloudinary
+router.post('/upload-profile-picture/:username', upload.single('profilePicture'), async (req, res) => {
+  try {
+      if (!req.file || !req.file.path) {
+          return res.status(400).json({ message: 'No file uploaded' });
       }
-      return res.status(400).json({ message: err });
-    }
 
-    try {
-      const finalFilePath = `uploads/${req.params.username}.jpg`; // Final file path (saved as .jpg)
+      const imageUrl = req.file.path; // Cloudinary URL
 
-      const profilePicturePath = `/uploads/${req.params.username}.jpg`;
-
-      // Save the path to the profile picture in the database
+      // Update the user's profile in your database
       const updatedUser = await User.findOneAndUpdate(
-        { username: req.params.username },
-        { profilePicture: profilePicturePath },
-        { new: true }
+          { username: req.params.username },
+          { profilePicture: imageUrl },
+          { new: true }
       );
 
       if (!updatedUser) return res.status(404).json({ message: 'User not found' });
 
-      res.json(updatedUser);
-    } catch (err) {
-      console.error("Error uploading profile picture:", err);
+      res.json({ profilePicture: imageUrl });
+  } catch (err) {
+      console.error('Error uploading profile picture:', err);
       res.status(500).json({ message: 'Error uploading profile picture' });
-    }
-  });
+  }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Get user profile by username
 router.get('/:username', async (req, res) => {

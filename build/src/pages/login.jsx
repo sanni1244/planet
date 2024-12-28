@@ -157,7 +157,7 @@ const LoginPage = () => {
               />
               <span className="ml-2 text-sm text-gray-600">Remember Me</span>
             </label>
-            <a href="#" className="text-sm text-purple-600 hover:underline">
+            <a href="#" className="text-sm text-purple-600 hover:underline ziindex">
               Forgot Password?
             </a>
           </div>
@@ -170,7 +170,7 @@ const LoginPage = () => {
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <a href="/signup" className="text-purple-600 hover:underline">
+          <a href="/signup" className="text-purple-600 hover:underline ziindex">
             Sign up here!
           </a>
         </p>

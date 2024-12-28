@@ -39,13 +39,13 @@ const ProfilePage = () => {
     return (
         <div
             className={`min-h-screen ${theme === 'light' ? 'bg-gradient-to-r from-cyan-400 to-teal-500 text-gray-800' : 'bg-gray-900 text-white'} transition-all duration-300`}>
-            <div className="container mx-auto p-6">
-                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
+            <div className="container mx-auto">
+                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8 extra-cut">
                     <div className="flex justify-between items-center mb-8">
                         <h1 className="text-4xl font-bold text-center alegreya-500 generic-header">Profile Settings</h1>
                     </div>
                     <div className="space-y-12">
-                        <div className="flex justify-center items-center space-x-6 mb-10">
+                        <div className="flex justify-center items-center space-x-6 mb-10 flex-wrong">
                             <Profilepic profilePicture={userData.profilePicture} />
                             <div>
                                 <h2 className="text-2xl font-semibold text-regular ">{userData.username ? userData.username[0].toUpperCase() + userData.username.slice(1) : 'Username'}</h2>

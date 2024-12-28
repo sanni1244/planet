@@ -87,67 +87,76 @@ const Final = () => {
                 : "Keep practicing, and you'll master this in no time! 💪";
 
     return (
-        <section className="final-score py-12 bg-gradient-to-b from-indigo-800 to-purple-900 text-white min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
-            {/* Confetti Animation */}
-            <Confetti width={windowSize.width} height={windowSize.height} />
+        <section className="final-score min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-900 to-purple-800 text-white relative overflow-hidden py-8 px-4">
+    {/* Confetti Animation */}
+    <Confetti width={windowSize.width} height={windowSize.height} />
 
-            {/* User Image */}
-            <div className="avatar mb-6">
-                <img
-                    src="https://picsum.photos/200"
-                    alt="User Avatar"
-                    className="w-36 h-36 rounded-full shadow-lg border-4 border-yellow-400"
-                />
-            </div>
+    {/* Subtle Background Glow */}
+    <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-3xl opacity-30 w-96 h-96 animate-pulse"></div>
 
-            {/* Score Display */}
-            <div className="text-center mb-12">
-                <h2 className="text-5xl font-extrabold mb-4">
-                    🎉 Final Score 🎉
-                </h2>
-                <p className="text-7xl font-black text-yellow-400">
-                    {score}
-                </p>
-                <p className="text-lg mt-4">{feedback}</p>
-            </div>
+    {/* Avatar Section */}
+    <div className="avatar mb-8">
+        <img
+            src="https://picsum.photos/200"
+            alt="User Avatar"
+            className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-md border-4 border-blue-400 hover:scale-105 transform transition duration-300 ease-in-out"
+        />
+    </div>
 
-            {/* Hint Section */}
-            <div className="hint-section max-w-xl w-full bg-white bg-opacity-10 rounded-lg shadow-lg p-8 text-center mb-12">
-                <h3 className="text-3xl font-bold text-yellow-300 mb-4">Hints</h3>
-                <p className="text-lg">{randomHint}</p>
-            </div>
+    {/* Score Display */}
+    <div className="text-center mb-8">
+        <h2 className="text-4xl font-bold mb-3 text-blue-200 animate-fade-in">
+            🌟 Your Final Score 🌟
+        </h2>
+        <p className="text-6xl md:text-7xl font-black text-pink-400 animate-bounce">{score}</p>
+        <p className="text-base md:text-lg mt-3 text-gray-300">{feedback}</p>
+    </div>
 
-            {/* Buttons for Navigation */}
-            <div className="flex gap-6 mb-8">  
-                <button
-                    onClick={() => navigate("/game")}
-                    className="bg-yellow-500 text-indigo-900 py-3 px-8 rounded-lg shadow hover:bg-yellow-600 transition transform hover:scale-105"
-                >
-                    🏠 Back to Dashboard
-                </button>
-                <button
-                    onClick={() => navigate("/startgame")}
-                    className="bg-green-500 text-white py-3 px-8 rounded-lg shadow hover:bg-green-600 transition transform hover:scale-105"
-                >
-                    🔄 Play Again
-                </button>
-            </div>
+    {/* Hint Section */}
+    <div className="hint-section max-w-md w-full bg-white bg-opacity-10 rounded-lg shadow-lg p-6 md:p-8 text-center mb-10">
+        <h3 className="text-2xl font-bold text-blue-300 mb-3">Did You Know?</h3>
+        <p className="text-sm md:text-base text-gray-200 animate-fade-in">
+            {randomHint}
+        </p>
+    </div>
 
-            {/* Share Your Score */}
-            <div className="share-section text-center">
-                <h3 className="text-xl font-bold mb-4">Share Your Score</h3>
-                <button
-                    onClick={() =>
-                        alert(
-                            `Shared! Let your friends know you scored ${score} points!`
-                        )
-                    }
-                    className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow hover:bg-blue-600 transition transform hover:scale-105"
-                >
-                    📢 Share Now
-                </button>
-            </div>
-        </section>
+    {/* Buttons for Navigation */}
+    <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <button
+            onClick={() => navigate("/game")}
+            className="py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 text-sm md:text-base font-semibold text-indigo-900 shadow-lg hover:from-blue-600 hover:to-teal-500 transition-transform transform hover:scale-110"
+        >
+            🏠 Dashboard
+        </button>
+        <button
+            onClick={() => navigate("/startgame")}
+            className="py-3 px-6 rounded-full bg-gradient-to-r from-green-500 to-lime-400 text-sm md:text-base font-semibold text-white shadow-lg hover:from-green-600 hover:to-lime-500 transition-transform transform hover:scale-110"
+        >
+            🔄 Try Again
+        </button>
+    </div>
+
+    {/* Share Section */}
+    <div className="text-center">
+        <h3 className="text-lg font-bold text-blue-200 mb-4 animate-fade-in">
+            Share Your Achievement
+        </h3>
+        <button
+  onClick={() => {
+    const scoreMessage = `🚀 I scored ${score} points! 🎉\n\nCheck out my awesome journey and play now: https://planetpix.vercel.app\n\n#GamingFun #ScoreChallenge`;
+    const imageUrl = 'https://picsum.photos/200'; // Replace with your actual image URL or favicon URL
+    const whatsappLink = `https://wa.me/?text=${encodeURIComponent(scoreMessage)}%0A%0A%3Cimg%20src%3D%22${encodeURIComponent(imageUrl)}%22%20alt%3D%22%22%3E`;
+
+    window.open(whatsappLink, '_blank');
+  }}
+  className="py-2 px-8 rounded-full bg-gradient-to-r from-pink-500 to-red-400 text-sm md:text-base font-semibold text-white shadow-lg hover:from-pink-600 hover:to-red-500 transition-transform transform hover:scale-110"
+>
+  🚀 Share Now
+</button>
+
+    </div>
+</section>
+    
     );
 };
 

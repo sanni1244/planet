@@ -163,14 +163,14 @@ const StartGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-700 text-white flex flex-col items-center justify-center p-4 metrophobic11">
-      <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg p-6 text-gray-800 whole">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Time Left: {formatTime(timeLeft)}</h2>
-          <h2 className="text-2xl font-bold">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-700 text-white flex flex-col items-center justify-center p-4">
+      <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg p-6 text-gray-800 font-tray">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-4">
+        <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-0">
             Question: {currentQuestionIndex + 1}/{questions.length}
           </h2>
-          <h2 className="text-2xl font-bold">Score: {score}</h2>
+          <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-0">Time Left: {formatTime(timeLeft)}</h2>
+          <h2 className="text-lg sm:text-2xl font-bold">Score: {score}</h2>
         </div>
         <div className="mb-6 img-bpx">
           <img
@@ -179,12 +179,12 @@ const StartGame = () => {
             className="rounded-lg shadow-md w-full h-64 object-cover myimgqq"
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {shuffledOptions.map((option, index) => (
             <button
               key={index}
               onClick={() => handleAnswer(option)}
-              className="py-2 px-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-green-600 transition transform hover:scale-105"
+              className="py-2 px-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-green-600 transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
             >
               {option}
             </button>
@@ -192,6 +192,7 @@ const StartGame = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

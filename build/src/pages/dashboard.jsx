@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   const userId1 = JSON.parse(localStorage.getItem("user")) || JSON.parse(sessionStorage.getItem("user"));
-  const userId = userId1?.username || "Rachel";
+  const userId = userId1?.username || "User";
 
   useEffect(() => {
     const fetchUserStats = async () => {
@@ -46,12 +46,65 @@ const Dashboard = () => {
   }, [userId]);
 
   if (isLoading) {
-    return <div className="text-center py-12 text-xl text-gray-700">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500">
+        <div className="flex flex-col items-center">
+          {/* Animated Spinner */}
+          <div className="w-16 h-16 border-4 border-white rounded-full animate-spin border-t-transparent"></div>
+  
+          {/* Loading Text */}
+          <h2 className="mt-4 text-2xl font-semibold text-white">Please wait...</h2>
+  
+          {/* Subtitle */}
+          <p className="mt-2 text-lg text-white/80">Your profile is loading.</p>
+        </div>
+      </div>
+    );
   }
+  
 
   if (error) {
-    return <div className="text-center py-12 text-xl text-red-500">{error}</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          {/* Error Icon */}
+          <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-10 h-10 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m6.938-4A7.938 7.938 0 0112 20.937 7.938 7.938 0 015.062 12 7.938 7.938 0 0112 3.063a7.938 7.938 0 016.938 4.937z"
+              />
+            </svg>
+          </div>
+  
+          {/* Error Message */}
+          <h2 className="mb-2 text-2xl font-semibold text-red-600">
+            Oops! Something went wrong.
+          </h2>
+  
+          {/* Detailed Error Message */}
+          <p className="mb-4 text-lg text-gray-700">{error}</p>
+  
+          {/* Retry Button */}
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 text-white bg-red-500 rounded-lg shadow-lg hover:bg-red-600 transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
+  
 
   if (userStats.length === 0) {
     return (

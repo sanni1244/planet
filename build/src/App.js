@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
 import About from "./pages/about";
 import Contact from "./pages/contact";
 import Login from "./pages/login";
@@ -21,13 +22,31 @@ import "./style/fonts.css";
 import WonderDetails from "./pages/getwonder";
 import WondersPage from "./pages/wonders";
 
-// Helper to check user authentication
+// Helper to check user authentication and token validity
 const isAuthenticated = () => {
-  return localStorage.getItem("user") || sessionStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user"));
+  const token = user?.token;
+
+  if (!token) return false;
+
+  try {
+    const { exp } = jwtDecode(token);
+    const currentTime = Date.now() / 1000; // Current time in seconds
+    if (exp < currentTime) {
+      // Token has expired
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("user");
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return false;
+  }
 };
 
 // Protected Route Component
-const ProtectedRoute = ({ element, ...rest }) => {
+const ProtectedRoute = ({ element }) => {
   return isAuthenticated() ? element : <Navigate to="/login" />;
 };
 
@@ -90,10 +109,7 @@ function App() {
         />
 
         {/* Protected Routes */}
-        <Route
-          path="/final"
-          element={<ProtectedRoute element={<Final />} />}
-        />
+        <Route path="/final" element={<ProtectedRoute element={<Final />} />} />
         <Route
           path="/game"
           element={
@@ -175,7 +191,7 @@ function App() {
             <ProtectedRoute
               element={
                 <>
-                 <span className="backButton" onClick={goBack}>
+                  <span className="backButton" onClick={goBack}>
                     <MdArrowBack className="icon-small" />
                   </span>
                   <WonderDetails />

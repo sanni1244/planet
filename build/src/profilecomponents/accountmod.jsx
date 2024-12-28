@@ -6,7 +6,8 @@ const Accountmod = ({ userId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [actionType, setActionType] = useState('');
-    
+    const [isLoading, setIsLoading] = useState(false); // New state for loading
+
     const showModal = (message, action = '') => {
         setModalMessage(message);
         setActionType(action);
@@ -19,7 +20,8 @@ const Accountmod = ({ userId }) => {
     };
 
     const executeAction = async () => {
-        setIsModalOpen(false); 
+        setIsModalOpen(false);
+        setIsLoading(true); // Show loading screen
         try {
             if (actionType === 'resetScore') {
                 await handleAction(
@@ -33,7 +35,7 @@ const Accountmod = ({ userId }) => {
                     'Account deleted successfully!',
                     'Error deleting account'
                 );
-                localStorage.removeItem("user");
+                localStorage.removeItem('user');
                 window.location.href = '/';
             } else if (actionType === 'deleteZeroScoreGames') {
                 await handleAction(
@@ -43,8 +45,10 @@ const Accountmod = ({ userId }) => {
                 );
             }
         } catch (err) {
-            console.error("Error executing action", err);
+            console.error('Error executing action', err);
             showModal('There was an error executing the action.', '');
+        } finally {
+            setIsLoading(false); // Hide loading screen
         }
     };
 
@@ -58,27 +62,42 @@ const Accountmod = ({ userId }) => {
         }
     };
 
-    const deleteZeroScoreGames = () => showModal('Are you sure you want to delete all zero-score games?', 'deleteZeroScoreGames');
-    const deleteAccount = () => showModal('Are you sure you want to delete your account? This action is irreversible.', 'deleteAccount');
-    const resetScore = () => showModal('Are you sure you want to reset your score?', 'resetScore');
+    const deleteZeroScoreGames = () =>
+        showModal('Are you sure you want to delete all zero-score games?', 'deleteZeroScoreGames');
+    const deleteAccount = () =>
+        showModal('Are you sure you want to delete your account? This action is irreversible.', 'deleteAccount');
+    const resetScore = () =>
+        showModal('Are you sure you want to reset your score?', 'resetScore');
 
     return (
-        <div className="space-y-6 data-represent">
+        <div className="space-y-6 data-represent relative">
+            {/* Loading Screen */}
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+                    <div className="text-white text-lg font-medium">Processing...</div>
+                </div>
+            )}
+
             <button
                 onClick={resetScore}
                 className="text-lg font-medium text-purple-600 hover:text-purple-800 cursor-pointer"
+                disabled={isLoading}
             >
                 <span className="mr-2">🔄</span> Reset Score
-            </button> <br />
+            </button>
+            <br />
             <button
                 onClick={deleteZeroScoreGames}
                 className="text-lg font-medium text-red-600 hover:text-red-800 cursor-pointer"
+                disabled={isLoading}
             >
                 <span className="mr-2">🗑️</span> Delete Zero-Score Games
-            </button> <br />
+            </button>
+            <br />
             <button
                 onClick={deleteAccount}
                 className="text-lg font-medium text-red-800 hover:text-red-900 cursor-pointer"
+                disabled={isLoading}
             >
                 <span className="mr-2">🚫</span> Delete Account
             </button>

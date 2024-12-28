@@ -33,7 +33,7 @@ const LeaderboardPage = () => {
     <div className="leaderboard">
       <section className="scoreboard py-5 bg-gray-50">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-8 generic-header">
-          Leaderboard
+          Global Leaderboard
         </h2>
         <div className="max-w-4xl mx-auto">
           <table className="scoreboard-table w-full text-left border-collapse border border-gray-200">
@@ -174,9 +174,6 @@ const LeaderboardPage = () => {
             </p>
           </div>
         </>
-   
-  
-      
       }
 
       <LeaderboardFetcher

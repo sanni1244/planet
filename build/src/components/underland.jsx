@@ -293,37 +293,48 @@ const CountdownTimer = () => {
   }, []);
 
   return (
-    <div className="countdown-container">
-      <h1 className="countdown-title">
-        Countdown to Events of {currentYear + 1}
-      </h1>
-      <div className="event-cards">
-        {nextEvents.map((item, index) => (
-          <div
-            key={index}
-            className={`event-card event-${index + 1}`}
-          >
-            <h2 className="event-name">{item.event.name} {currentYear + 1}</h2>
-            <p className="event-description">{item.event.description}</p>
-            <p className="event-date">
-              {item.event.targetDate.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-              })}
-            </p>
-            <p className="event-countries">
-              {item.event.countries === 'World Wide'
-                ? 'Celebrated Worldwide'
-                : `Celebrated in: ${item.event.countries}`}
-            </p>
-            <div className="countdown">
-              {item.timeLeft.days}d : {item.timeLeft.hours}h : {item.timeLeft.minutes}m : {item.timeLeft.seconds}s
-            </div>
-          </div>
-        ))}
+    <div className="flex flex-col items-center justify-center px-5 py-10 bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-700 text-white min-h-screen">
+  <h1 className="text-4xl sm:text-5xl font-bold mb-10 tracking-wide text-center transition-transform transform hover:scale-105">
+    Countdown to Events of {currentYear + 1}
+  </h1>
+  <div className="grid gap-5 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl">
+    {nextEvents.map((item, index) => (
+      <div
+        key={index}
+        className={`p-5 rounded-lg shadow-lg bg-opacity-75 ${
+          index % 3 === 0
+            ? "bg-orange-500"
+            : index % 3 === 1
+            ? "bg-green-500"
+            : "bg-blue-500"
+        } text-center transform hover:scale-105 transition-transform`}
+      >
+        <h2 className="text-2xl font-semibold mb-3">
+          {item.event.name} {currentYear + 1}
+        </h2>
+        <p className="text-sm sm:text-base mb-3 text-gray-200">
+          {item.event.description}
+        </p>
+        <p className="text-sm sm:text-base font-semibold mb-3">
+          {item.event.targetDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </p>
+        <p className="text-sm sm:text-base mb-3">
+          {item.event.countries === "World Wide"
+            ? "Celebrated Worldwide"
+            : `Celebrated in: ${item.event.countries}`}
+        </p>
+        <div className="text-lg font-bold text-yellow-300">
+          {item.timeLeft.days}d : {item.timeLeft.hours}h : {item.timeLeft.minutes}m : {item.timeLeft.seconds}s
+        </div>
       </div>
-    </div>
+    ))}
+  </div>
+</div>
+
   );
 };
 

@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import LandingPage from '../components/landingPage'
-import MainSection from '../components/mainSection'
+import MainSection from '../components/globe'
 import axios from 'axios';
+import Underland from '../components/underland';
+import Hintland from '../components/hintland';
+import Footer from '../components/footer';
 
 
 const Home = () => {
@@ -9,6 +12,9 @@ const Home = () => {
         <>
             <LandingPage />
             <MainSection/>
+            <Underland/>
+            <Hintland/>
+            <Footer/>
         </>
     )
 }

@@ -389,3 +389,180 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Main container styling */
+.countdown-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  background: linear-gradient(135deg, #e91e63, #9c27b0, #673ab7);
+  height: 100vh;
+  font-family: "Alegreya", serif;
+  color: #fff;
+  animation: gradientAnimation 5s infinite alternate;
+  overflow: hidden;
+}
+
+/* Main title */
+.countdown-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 50px;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+  text-transform: uppercase;
+  color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.countdown-title:hover {
+  transform: scale(1.1);
+}
+
+/* Event cards container */
+.event-cards {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  position: relative;
+  animation: slideIn 1.5s ease-out;
+}
+
+/* Event card styling */
+.event-card {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(30px);
+
+}
+
+.event-card:hover {
+  transform: translateY(0);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Event-specific styles */
+.event-1 {
+  background: rgba(255, 87, 34, 0.8);
+}
+
+.event-2 {
+  background: rgba(76, 175, 80, 0.8);
+}
+
+.event-3 {
+  background: rgba(33, 150, 243, 0.8);
+}
+
+/* Event name and description */
+.event-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.event-description {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+/* Event date */
+.event-date {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #f1f1f1;
+}
+
+/* Countdown timer */
+.countdown {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffeb3b;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+/* Background animation */
+@keyframes gradientAnimation {
+  
+  50% {
+    background: linear-gradient(135deg, #e91e63, #9c27b0, #673ab7);
+  }
+}
+
+/* Slide-in animation for cards */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+
+

@@ -20,7 +20,8 @@ import Chatbot from "./pages/learn";
 import PageNotFound from "./pages/notfound";
 import "./style/fonts.css";
 import "./style/home.css";
-import "./style/responsive.css";
+import "./style/responsive.css";  
+import "./style/sectionshero.css";  
 import WonderDetails from "./pages/getwonder";
 import WondersPage from "./pages/wonders";
 
